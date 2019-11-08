@@ -1,0 +1,9 @@
+{
+  "name": "taxrate",
+  "type": "record",
+  "fields": [
+    {"name": "id", "type": "string"},
+    {"name": "name", "type": "string"},
+    {"name": "rate", "type": "float"}
+  ]
+}
