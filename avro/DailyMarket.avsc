@@ -1,0 +1,14 @@
+{
+  "name": "dailymarket",
+  "type": "record",
+  "fields": [
+    {"name":  "cdc_flag", "type":  ["string", "null"]},
+    {"name":  "cdc_dsn", "type":  ["string"]},
+    {"name":  "date", "type":  "string"},
+    {"name":  "symb", "type": "string"},
+    {"name":  "close", "type": "float"},
+    {"name":  "high", "type":  "float"},
+    {"name":  "low", "type":  "float"},
+    {"name":  "vol", "type": "long"}
+  ]
+}

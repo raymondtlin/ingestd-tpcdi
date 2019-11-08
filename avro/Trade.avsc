@@ -1,0 +1,22 @@
+{
+  "name": "trade",
+  "type": "record",
+  "fields": [
+    {"name": "cdc_flag","type": "string"},
+    {"name": "cdc_dsn", "type": "string"},
+    {"name": "id", "type": "string"},
+    {"name": "dts", "type": "string"},
+    {"name": "status_type_id", "type": "string"},
+    {"name": "trade_type_id", "type": "string"},
+    {"name": "is_cash", "type": "boolean"},
+    {"name": "symb", "type": "string"},
+    {"name": "qty", "type": "int"},
+    {"name": "bidprice", "type": "float"},
+    {"name": "ca_id", "type": "string"},
+    {"name": "execname", "type": "string"},
+    {"name": "trade_price", "type": ["float","null"]},
+    {"name": "fee_chrgd", "type": ["int","null"]},
+    {"name": "comm", "type": ["long","null"]},
+    {"name": "tax", "type": ["long","null"]}
+  ]
+}
