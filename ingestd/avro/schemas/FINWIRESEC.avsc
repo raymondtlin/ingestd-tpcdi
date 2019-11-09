@@ -1,0 +1,16 @@
+{
+  "name": "finwiresec",
+  "type": "record",
+  "fields": [
+    {"name": "pts","type": "string"},
+    {"name": "rectype","type": "string"},
+    {"name": "symbol", "type": "string"},
+    {"name": "issuetype", "type": "string"},
+    {"name": "exchange_id", "type": "string"},
+    {"name": "sh_out", "type": "string"},
+    {"name": "firsttradedate", "type": "string"},
+    {"name": "firsttradeexch", "type": "string"},
+    {"name": "dividend", "type": "float"},
+    {"name": "coname_or_cik", "type": "string"}
+  ]
+}
