@@ -6,7 +6,7 @@ class ProducerFactory:
     def __init_(self):
         self._producers = {}
 
-    def register_producer(self, key, producer):
+    def register_producer(self, key, producer: object):
         self._producers[key] = producer
 
     def create(self, key, **kwargs):
@@ -15,11 +15,4 @@ class ProducerFactory:
             raise ValueError(key)
         return producer(**kwargs)
 
-
-factory = ProducerFactory()
-
-for topic in ("finwirecmp", "finwiresec", "finwirefin"):
-    conf = configuration.get('producer').get(topic)
-    topic_name = topic
-    factory.register_producer(topic, kafka.Producer(config=conf))
 
