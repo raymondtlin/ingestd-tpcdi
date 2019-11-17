@@ -1,0 +1,6 @@
+{
+  "name": "tradetype-key",
+  "namespace": "ingestd.avro.schemas.key.tradetype",
+  "type": "string",
+  "fields": {"name": "id"}
+}

@@ -1,0 +1,22 @@
+
+{
+  "name": "finwirefin-value",
+  "namespace": "ingestd.avro.schemas.value.finwirefin",
+  "type": "record",
+  "fields": [
+    {"name": "year", "type": "string"},
+    {"name": "quarter", "type": "int"},
+    {"name": "qtrstartdate", "type": "string"},
+    {"name": "postingdate", "type": "string"},
+    {"name": "revenue", "type": "long"},
+    {"name": "earnings", "type": "long"},
+    {"name": "eps", "type": "float"},
+    {"name": "diluted_eps", "type": "float"},
+    {"name": "margin", "type": "long"},
+    {"name": "inventory", "type": "long"},
+    {"name": "assets", "type": "long"},
+    {"name": "liabilities", "type": "long"},
+    {"name": "sh_out", "type": "long"},
+    {"name": "diluted_sh_out", "type": "long"}
+  ]
+}

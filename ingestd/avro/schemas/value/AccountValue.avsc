@@ -1,9 +1,9 @@
 {
-  "name": "account",
+  "name": "account-value",
+  "namespace": "ingestd.avro.schemas.value.account",
   "type": "record",
   "fields": [
     {"name": "cdc_flag", "type": ["string","null"]},
-    {"name": "cdc_dsn", "type": "long"},
     {"name": "ca_id", "type": "string"},
     {"name": "ca_b_id", "type": "string"},
     {"name": "ca_c_id", "type": "string"},

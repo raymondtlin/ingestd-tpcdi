@@ -1,5 +1,6 @@
 {
   "name": "holdinghistory",
+  "namespace": "ingestd.avro.schemas.raw.holdinghistory",
   "type": "record",
   "fields": [
     {"name": "cdc_flag","type": "string"},

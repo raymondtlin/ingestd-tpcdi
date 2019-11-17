@@ -1,0 +1,6 @@
+{
+  "name": "cashtransaction-key",
+  "namespace": "ingestd.avro.schemas.key.cashtransaction",
+  "type": "string",
+  "fields": {"name": "cdc_dsn"}
+}

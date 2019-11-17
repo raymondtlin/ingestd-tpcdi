@@ -1,5 +1,6 @@
 {
   "name": "taxrate",
+  "namespace": "ingestd.avro.schemas.raw.taxrate",
   "type": "record",
   "fields": [
     {"name": "id", "type": "string"},

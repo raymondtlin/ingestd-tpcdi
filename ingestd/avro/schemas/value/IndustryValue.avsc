@@ -1,0 +1,9 @@
+{
+  "name": "industry-value",
+  "namespace": "ingestd.avro.schemas.value.industry",
+  "type": "record",
+  "fields": [
+    {"name": "name", "type": "string"},
+    {"name": "sc_id", "type": "string"}
+  ]
+}

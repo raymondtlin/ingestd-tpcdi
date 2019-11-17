@@ -1,0 +1,15 @@
+{
+  "name": "hr-value",
+  "namespace": "ingestd.avro.schemas.value.hr",
+  "type": "record",
+  "fields": [
+    {"name": "manager_id", "type": "string"},
+    {"name": "first_name", "type": "string"},
+    {"name": "last_name", "type": "string"},
+    {"name": "middle_initial", "type": ["string","null"]},
+    {"name": "job_code", "type": ["string","null"]},
+    {"name": "branch", "type": ["string","null"]},
+    {"name": "office", "type": ["string","null"]},
+    {"name": "phone", "type": ["string","null"]}
+  ]
+}

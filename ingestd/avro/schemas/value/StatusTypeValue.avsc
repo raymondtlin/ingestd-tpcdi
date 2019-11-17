@@ -1,0 +1,7 @@
+{
+  "name": "statustype-value",
+  "namespace": "ingestd.avro.schemas.value.statustype",
+  "type": "string",
+  "fields":
+    {"name": "name"}
+}
