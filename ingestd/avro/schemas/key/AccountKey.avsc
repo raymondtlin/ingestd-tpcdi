@@ -1,0 +1,6 @@
+{
+  "name": "account-key",
+  "namespace": "ingestd.avro.schemas.key.account",
+  "type": "string",
+  "fields": {"name": "cdc_dsn"}
+}

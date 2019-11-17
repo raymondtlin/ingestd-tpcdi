@@ -1,5 +1,6 @@
 {"type":"record",
-  "name":"customers",
+  "name":"customer",
+  "namespace": "ingestd.avro.schemas.raw.customer",
   "fields": [
     {"name":"id","type":"int"},
     {"name":"tax_id","type":"string"},

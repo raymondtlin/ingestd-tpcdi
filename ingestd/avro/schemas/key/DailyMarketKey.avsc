@@ -1,0 +1,6 @@
+{
+  "name": "dailymarket-key",
+  "namespace": "ingestd.avro.schemas.key.dailymarket",
+  "type": "string",
+  "fields": {"name":  "cdc_dsn"}
+}

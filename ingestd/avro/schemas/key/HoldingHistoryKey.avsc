@@ -1,0 +1,7 @@
+{
+  "name": "holdinghistory-key",
+  "namespace": "ingestd.avro.schemas.key.holdinghistory",
+  "type": "string",
+  "fields":
+    {"name": "cdc_dsn"}
+}

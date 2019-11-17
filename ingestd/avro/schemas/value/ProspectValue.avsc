@@ -1,8 +1,8 @@
 {
-  "name": "prospect",
+  "name": "prospect-value",
+  "namespace": "ingestd.avro.schemas.value.prospect",
   "type": "record",
   "fields": [
-    {},
     {"name": "agencyid","type": "string"},
     {"name": "lastname","type": "string"},
     {"name": "firstname","type": "string"},

@@ -1,0 +1,19 @@
+{
+  "name": "finwirecmp-value",
+  "namespace": "ingestd.avro.schemas.value.finwirecmp",
+  "type": "record",
+  "fields": [
+    {"name": "status", "type": "string"},
+    {"name": "industryid","type": "string"},
+    {"name": "sprating", "type":"string"},
+    {"name": "foundingdate", "type": ["string","null"]},
+    {"name": "addrline1", "type": "string"},
+    {"name": "addrline2", "type": ["string","null"]},
+    {"name": "postalcode", "type":  "string"},
+    {"name": "city", "type": "string"},
+    {"name": "stateprovince", "type": "string"},
+    {"name": "country", "type": ["string","null"]},
+    {"name": "ceoname", "type": "string"},
+    {"name": "description","type": "string"}
+  ]
+}

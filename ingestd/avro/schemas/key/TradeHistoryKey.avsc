@@ -1,0 +1,9 @@
+{
+  "name": "tradehistory",
+  "type": "record",
+  "fields": [
+    {"name": "th_t_id", "type": "string"},
+    {"name": "th_dts", "type": "string"},
+    {"name": "th_s_id", "type": "string"}
+  ]
+}

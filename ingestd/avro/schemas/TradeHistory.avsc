@@ -1,9 +1,0 @@
-{
-  "name": "tradehistory",
-  "type": "record",
-  "fields": [
-    {"name": "thtid", "type": "string"},
-    {"name": "thdts", "type": "string"},
-    {"name": "thsid", "type": "string"}
-  ]
-}

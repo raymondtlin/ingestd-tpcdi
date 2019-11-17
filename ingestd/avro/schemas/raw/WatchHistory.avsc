@@ -1,0 +1,13 @@
+{
+  "name": "watchhistory",
+  "namespace": "ingestd.avro.schemas.raw.watchhistory",
+  "type": "record",
+  "fields": [
+    {"name": "cdc_flag", "type": "string"},
+    {"name": "cdc_dsn", "type": "string"},
+    {"name": "customer_id","type": "string"},
+    {"name": "symb", "type": "string"},
+    {"name": "dts", "type": "string"},
+    {"name": "action", "type": "string"}
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "name": "statustype",
+  "namespace": "ingestd.avro.schemas.raw.statustype",
   "type": "record",
   "fields": [
     {"name": "id", "type": "string"},

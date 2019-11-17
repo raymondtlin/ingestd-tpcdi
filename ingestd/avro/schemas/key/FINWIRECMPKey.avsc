@@ -1,0 +1,11 @@
+{
+  "name": "finwirecmp-key",
+  "namespace": "ingestd.avro.schemas.key.finwirecmp",
+  "type": "record",
+  "fields": [
+    {"name": "pts", "type": "string"},
+    {"name": "rectype", "type": "string"},
+    {"name": "companyname", "type": "string"},
+    {"name": "cik", "type": "string"}
+  ]
+}

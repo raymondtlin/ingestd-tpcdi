@@ -1,5 +1,6 @@
 {
   "name": "trade",
+  "namespace": "ingestd.avro.schemas.raw.trade",
   "type": "record",
   "fields": [
     {"name": "cdc_flag","type": "string"},
