@@ -9,12 +9,11 @@ class SourceFactory:
     def __init__(self):
         self._sources = {}
 
-    def register_source(self, key: str, source):
+    def register(self, key: str, source):
         """
         Registers a stream source
         :param key: identifier String for registered source
         :param source: Source object
-        :return:
         """
         self._sources[key] = source
 
@@ -38,7 +37,7 @@ class StrategyFactory:
     def __init__(self):
         self._strategies = {}
 
-    def register_strategy(self, key: str, strategy):
+    def register(self, key: str, strategy):
         """
         Registers an strategy
         :param key: identifier String for registered Strategy
@@ -47,7 +46,7 @@ class StrategyFactory:
         """
         self._strategies[key] = strategy
 
-    def get_strategy(self, key: str):
+    def get(self, key: str):
         """
         Retrieves instance of registered strategy.
         :param key: registered file_format str
