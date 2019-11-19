@@ -1,6 +1,6 @@
 {
-  "name": "hr-key",
+  "name": "hrkey",
   "namespace": "ingestd.avro.schemas.key.hr",
-  "type": "string",
-  "fields": {"name": "employee_id" }
+  "type": "record",
+  "fields": [{"name": "employee_id", "type": "string", "default" : "NONE"}]
 }

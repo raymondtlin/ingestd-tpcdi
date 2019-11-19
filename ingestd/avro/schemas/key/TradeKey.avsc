@@ -1,5 +1,5 @@
 {
-  "name": "trade-key",
+  "name": "tradekey",
   "namespace": "ingestd.avro.schemas.key.trade",
   "type": "record",
   "fields": [

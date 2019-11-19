@@ -1,10 +1,10 @@
 {
-  "name": "customermgmt-key",
+  "name": "customermgmtkey",
   "namespace": "ingestd.avro.schemas.key.customermgmt",
   "type": "record",
   "fields": [
-    {"name": "action", "type": "string"},
-    {"name": "ca_id","type": ["string","null"]},
-    {"name": "c_id","type": ["string","null"]}
+    {"name": "action", "type": "string", "default": "I"},
+    {"name": "ca_id","type": ["string","null"], "default": "NONE"},
+    {"name": "c_id","type": ["string","null"], "default": "NONE"}
     ]
 }

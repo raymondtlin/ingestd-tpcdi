@@ -1,6 +1,6 @@
 {
   "name": "taxrate-key",
   "namespace": "ingestd.avro.schemas.key.taxrate",
-  "type": "string",
-  "fields": {"name": "id"}
+"type": "record",
+  "fields": [{"name": "id", "type": "string", "default" : "NONE"}]
 }

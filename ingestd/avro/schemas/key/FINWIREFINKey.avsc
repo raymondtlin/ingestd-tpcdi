@@ -1,10 +1,10 @@
 {
-  "name": "finwirefin-key",
+  "name": "finwirefinkey",
   "namespace": "ingestd.avro.schemas.key.finwirefin",
   "type": "record",
   "fields": [
-    {"name": "pts", "type": "string"},
-    {"name": "rectype", "type": "string"},
-    {"name": "coname_or_cik", "type": "string"}
+    {"name": "pts", "type": "string", "default": "NONE"},
+    {"name": "rectype", "type": "string", "default": "FIN"},
+    {"name": "coname_or_cik", "type": "string", "default": "NONE"}
   ]
 }
