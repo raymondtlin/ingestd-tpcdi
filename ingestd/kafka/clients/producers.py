@@ -1,128 +1,70 @@
-from confluent_kafka.avro import AvroProducer
-from confluent_kafka.cimpl import Producer
-
-
-class ProducerFactory:
-    def __init_(self):
-        self._producers = {}
-
-    def register_producer(self, key, producer: Producer or AvroProducer):
-        self._producers[key] = producer
-
-    def create(self, key, rc):
-        producer = self._producers.get(key)
-        if not producer:
-            raise ValueError(key)
-        else:
-            return producer(**rc)
-
-
-import sys
-import types
-import collections
-import itertools
-import operator
-import re
-
+from __future__ import absolute_import
+import os
+from glob import glob
+from ingestd.sources import FileSource
 from confluent_kafka import avro
+from ingestd.strategies import parseDelimited
+
+txt_files = [file for file in glob('data/*txt')]
+
+dct = {}
+key_schemas, value_schemas = [], []
+
+for file in txt_files:
+    dct.update(dict({file.split('/')[-1].split('.')[0]: file}))
+
+for key in dct.keys():
+    with open(f'ingestd/avro/schemas/key/{key}Key.avsc') as f:
+        key_schemas.append(avro.loads(f.read()))
+    with open(f'ingestd/avro/schemas/value/{key}Value.avsc') as f:
+        value_schemas.append(avro.loads(f.read()))
+
+for (k, v), key_fields, value_fields in zip(dct.items(), key_schemas, value_schemas):
+    dct.update(dict({k: {"path": v, "key_fields": [field.get('name') for field in key_fields.to_json().get('fields')],
+                         "value_fields": [field.get('name') for field in value_fields.to_json().get('fields')]}}))
 
 
-if sys.version_info[0] > 2:                                                                                 # Python 3
-    createBoundMethod = types.MethodType
-else:
-    def createBoundMethod(func, obj):                                                               # Python 2
-        return types.MethodType(func, obj, obj.__class__)
+CONFIG = {"bootstrap.servers": os.getenv('CCLOUDBROKERS'),
+          "sasl.mechanisms": "PLAIN",
+          "security.protocol": "SASL_SSL",
+          "sasl.username": os.getenv('CCLOUDKEY'),
+          "sasl.password": os.getenv('CCLOUDSECRET')
+          }
+
+sources = [FileSource(file_path=dct[key].get('path'),
+                      schema_path=f'ingestd/avro/schemas/raw/{key}.avsc',
+                      key_fields=dct[key].get('key_fields'),
+                      value_fields=dct[key].get('value_fields'),
+                      parser=parseDelimited) for key in dct.keys()]
+
+producers = [avro.AvroProducer(**CONFIG,
+                               default_key_schema=key_schema,
+                               default_value_schema=value_schema,
+                               schema_registry=os.getenv('SCHEMAREGISTRYURL'))
+             for key_schema, value_schema in zip(key_schemas, value_schemas)]
+
+for src, producer, topic in zip(sources, producers, dct.keys()):
+    for specific_record in src.produce_payload(specific_flag=True):
+        producer.produce(topic=topic,
+                         key=dict({key_name: key_value for key_name, key_value
+                                   in zip(specific_record.get('record_key_fields'),
+                                          specific_record.get('record_key'))}),
+                         value=dict({field_name: field_value for field_name, field_value
+                                     in zip(specific_record.get('value_key_fields'),
+                                            specific_record.get('record_value'))
+                                     }),
+                         callback=acked
+                         )
 
 
-class Operator(object):
-    def __init__(self,
-                 source_path: str = None,
-                 schema_path: str = None,
-                 file_format: str = None,
-                 message_key: set = None,
-                 message_value: set = None):
-        self.source_path = source_path
-        self.schema = self.get_schema(schema_path)
-        self.fields = set(self.schema.field_map)
-        self.record_keys = self.set_record_keys(message_key)
-        self.record_values = self.set_record_values(message_value)
-
-        if file_format is None:
-            self.file_format = source_path.split('.')[-1].lower()
-        else:
-            self.file_format = file_format
-
-    def stream(self):
-        """
-        Creates file handle, generates lines
-        :return: list(str)
-        """
-        with open(self.source_path) as handle:
-            yield from handle.readlines()
-
-    def parse(self):
-        strategy_lku = {'xml': RecordParsingStrategy('parseXML', parseXML(self)),
-                        'csv': RecordParsingStrategy('parseCSV', parseDelimited(self, ',')),
-                        'txt': RecordParsingStrategy('parseTXT', parseDelimited(self)),
-                        'finwire': RecordParsingStrategy('parseFINWIRE', parseFixedWidth(self))}
-
-        strategy = strategy_lku.get(self.file_format)
-        yield from strategy.execute()
-
-    @staticmethod
-    def get_schema(path_to_schema: str = None) -> object:
-        with open(path_to_schema) as handle:
-            try:
-                return avro.loads(handle.read())
-            except Exception as e:
-                print(f"Unable to serialize schema as avro, {e}")
-
-    @staticmethod
-    def set_record_keys(key_fields: list = None) -> set:
-        if key_fields is not None:
-            return set(field for field in key_fields)
-
-    def set_record_values(self, value_fields: list = None) -> set:
-        if value_fields is not None:
-            return set(value for value in value_fields if value not in self.record_keys)
-        else:
-            return set(value for value in self.fields if value not in self.record_keys)
-
-    # def produce_general_payload(self):
-    #     """
-    #     Lazy-generates records as namedtuples
-    #     :return: namedtuple record
-    #     """
-    #     Payload = collections.namedtuple('Payload_', self.fields)
-    #     for nt in map(Payload._make, iter(self.parse())):
-    #         yield nt
-    #
-    # def produce_specific_payload(self):
-    #
-    #     payload = collections.defaultdict(list)
-    #
-    #     for message in self.produce_general_payload():
-    #         msg_dct = message._asdict
-    #
-    #         payload['record_key'] = operator.itemgetter(*self.record_key)(msg_dct)
-    #         payload['record_val'] = operator.itemgetter(*self.record_values)(msg_dct)
-    #         payload['key_fields'] = list(*self.record_key)
-    #         payload['value_fields'] = list(*self.record_values)
-    #         yield payload
-
-    def produce_payload(self, specific_flag: bool = False):
-        genericPayload = collections.namedtuple('Payload_', self.fields)
-        specificPayload = {}
-
-        for ntuple in map(genericPayload._make, iter(self.parse())):
-            if specific_flag:
-                yield ntuple
-            else:
-                dct = ntuple._asdict()
-                specificPayload['record_key'] = operator.itemgetter(*self.record_keys)(dct)
-                specificPayload['record_value'] = operator.itemgetter(*self.record_values)(dct)
-                specificPayload['record_key_fields'] = set(*self.record_keys)
-                specificPayload['value_key_fields'] = set(*self.record_values)
-
-                yield specificPayload
-
+def acked(err, msg):
+    """
+    Delivery report callback called (from flush()) on successful/failed delivery of msg.
+    :param err:
+    :param msg:
+    :return:
+    """
+    if err is not None:
+        print(f"Failed to delivery message {err.str()}")
+    else:
+        print(f"Produced to: {msg.topic()} [{msg.partition()}] @ {msg.offset()}")
