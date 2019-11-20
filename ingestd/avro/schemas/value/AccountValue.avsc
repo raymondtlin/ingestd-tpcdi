@@ -1,14 +1,14 @@
 {
-  "name": "account-value",
+  "name": "accountValue",
   "namespace": "ingestd.avro.schemas.value.account",
   "type": "record",
   "fields": [
-    {"name": "cdc_flag", "type": ["string","null"]},
-    {"name": "ca_id", "type": "string"},
-    {"name": "ca_b_id", "type": "string"},
-    {"name": "ca_c_id", "type": "string"},
-    {"name": "ca_name", "type": ["string","null"]},
-    {"name": "ca_tax_st", "type": ["int","null"]},
-    {"name": "ca_st_id", "type": ["string","null"]}
+    {"name": "cdc_flag", "type": ["string","null"], "default": "I"},
+    {"name": "ca_id", "type": "string", "default": "NONE"},
+    {"name": "ca_b_id", "type": "string", "default": "NONE"},
+    {"name": "ca_c_id", "type": "string", "default": "NONE"},
+    {"name": "ca_name", "type": ["string","null"], "default": "NONE"},
+    {"name": "ca_tax_st", "type": ["int","null"], "default": "0"},
+    {"name": "ca_st_id", "type": ["string","null"], "default": "NONE"}
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "tradehistory",
+  "name": "tradehistorykey",
   "type": "record",
   "fields": [
     {"name": "th_t_id", "type": "string"},

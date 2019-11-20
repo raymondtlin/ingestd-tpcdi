@@ -4,10 +4,10 @@
   "namespace": "ingestd.avro.schemas.value.holdinghistory",
   "type": "string",
   "fields": [
-    {"name": "cdc_flag","type": "string"},
-    {"name": "h_t_id", "type": "string"},
-    {"name": "t_id", "type": "string"},
-    {"name": "qty_before", "type": "int"},
-    {"name": "qty_after", "type": "int"}
+    {"name": "cdc_flag","type": "string","default": "NONE"},
+    {"name": "h_t_id", "type": "string","default": "NONE"},
+    {"name": "t_id", "type": "string","default": "NONE"},
+    {"name": "qty_before", "type": "int","default": 0},
+    {"name": "qty_after", "type": "int","default": 0}
   ]
 }

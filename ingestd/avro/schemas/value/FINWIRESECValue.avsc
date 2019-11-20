@@ -1,13 +1,13 @@
 {
-  "name": "finwiresec-value",
+  "name": "finwiresecValue",
   "namespace": "ingestd.avro.schemas.value.finwirefin",
   "type": "record",
   "fields": [
-    {"name": "issuetype", "type": "string"},
-    {"name": "exchange_id", "type": "string"},
-    {"name": "sh_out", "type": "string"},
-    {"name": "firsttradedate", "type": "string"},
-    {"name": "firsttradeexch", "type": "string"},
-    {"name": "dividend", "type": "float"}
+    {"name": "issuetype", "type": "string","default": "NONE"},
+    {"name": "exchange_id", "type": "string","default": "NONE"},
+    {"name": "sh_out", "type": "string","default": "NONE"},
+    {"name": "firsttradedate", "type": "string","default": "NONE"},
+    {"name": "firsttradeexch", "type": "string","default": "NONE"},
+    {"name": "dividend", "type": "float","default": 0.0}
   ]
 }
