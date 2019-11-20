@@ -12,9 +12,9 @@ class FileSource(object):
         self.file_path = kwargs.pop('file_path', None)
         self.schema_path = kwargs.pop('schema_path', None)
         self.schema = self.get_schema(self.schema_path)
-        self.fields = set(self.schema.field_map)
-        self.key_fields = set(field for field in kwargs.pop('key_fields'))
-        self.value_fields = set(field for field in self.fields if field not in self.key_fields)
+        self.fields = list(self.schema.field_map)
+        self.key_fields = list(field for field in kwargs.pop('key_fields'))
+        self.value_fields = list(field for field in self.fields if field not in self.key_fields)
 
         if kwargs.get('parser', None):
             self.parse = types.MethodType(kwargs.pop('parser'), self)
@@ -61,7 +61,7 @@ class FileSource(object):
         """
         Creates a message which can be sent to a Kafka Producer.
         :param specific_flag: if set to False, yields named tuple of all fields \
-                              if set as True, yields dict with fields seperated by specified schema
+                              if set as True, yields dict with fields separated by specified schema
         :return: namedtuple or dict
         """
         genericPayload = collections.namedtuple('Payload_', self.fields)
@@ -72,9 +72,18 @@ class FileSource(object):
                 yield ntuple
             else:
                 dct = ntuple._asdict()
-                specificPayload['record_key'] = operator.itemgetter(*self.key_fields)(dct)
-                specificPayload['record_value'] = operator.itemgetter(*self.value_fields)(dct)
-                specificPayload['record_key_fields'] = set(self.key_fields)
-                specificPayload['value_key_fields'] = set(self.value_fields)
+                specificPayload['record_keys'] = operator.itemgetter(*self.key_fields)(dct)
+                specificPayload['record_values'] = operator.itemgetter(*self.value_fields)(dct)
+                specificPayload['record_key_names'] = list(self.key_fields)
+                specificPayload['record_value_names'] = list(self.value_fields)
+
+                if len(specificPayload['record_key_names']) > 1:
+                    specificPayload['key'] = dict({k: v for k, v in zip(specificPayload.pop('record_key_names'),
+                                                                        specificPayload.pop('record_keys'))})
+                else:
+                    specificPayload['key'] = dict({specificPayload.pop('record_key_names'): specificPayload.pop('record_keys')})
+
+                specificPayload['value'] = dict({k: v for k, v in zip(specificPayload.pop('record_value_names'),
+                                                                      specificPayload.pop('record_values'))})
 
                 yield specificPayload
