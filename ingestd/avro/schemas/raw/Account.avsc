@@ -1,15 +1,15 @@
 {
   "name": "account",
-  "namespace": "ingestd.avor.schemas.raw.account",
+  "namespace": "ingestd.avro.schemas.raw.account",
   "type": "record",
   "fields": [
-    {"name": "cdc_flag", "type": ["string","null"]},
-    {"name": "cdc_dsn", "type": "string"},
-    {"name": "ca_id", "type": "string"},
-    {"name": "ca_b_id", "type": "string"},
-    {"name": "ca_c_id", "type": "string"},
-    {"name": "ca_name", "type": ["string","null"]},
-    {"name": "ca_tax_st", "type": ["int","null"]},
-    {"name": "ca_st_id", "type": ["string","null"]}
+    {"name": "cdc_flag", "type": ["string","null"], "default": "NONE"},
+    {"name": "cdc_dsn", "type": "string","default": "NONE"},
+    {"name": "ca_id", "type": "string","default": "NONE"},
+    {"name": "ca_b_id", "type": "string","default": "NONE"},
+    {"name": "ca_c_id", "type": "string","default": "NONE"},
+    {"name": "ca_name", "type": ["string","null"], "default": "NONE"},
+    {"name": "ca_tax_st", "type": ["int","null"], "default": 0},
+    {"name": "ca_st_id", "type": ["string","null"], "default": "NONE"}
   ]
 }

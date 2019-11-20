@@ -1,14 +1,14 @@
 {
-  "name": "dailymarket-value",
+  "name": "dailymarketValue",
   "namespace": "ingestd.avro.schemas.value.dailymarket",
   "type": "record",
   "fields": [
-    {"name":  "cdc_flag", "type":  ["string", "null"]},
-    {"name":  "date", "type":  "string"},
-    {"name":  "symb", "type": "string"},
-    {"name":  "close", "type": "float"},
-    {"name":  "high", "type":  "float"},
-    {"name":  "low", "type":  "float"},
-    {"name":  "vol", "type": "long"}
+    {"name":  "cdc_flag", "type":  ["string", "null"],"default": "NONE"},
+    {"name":  "date", "type":  "string","default": "NONE"},
+    {"name":  "symb", "type": "string","default": "NONE"},
+    {"name":  "close", "type": "float","default":  0.0},
+    {"name":  "high", "type":  "float","default": 0.0},
+    {"name":  "low", "type":  "float","default": 0.0},
+    {"name":  "vol", "type": "long","default": 0}
   ]
 }

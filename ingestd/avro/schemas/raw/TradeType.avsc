@@ -1,9 +1,10 @@
 {
-  "name": "tradetypes",
+  "name": "tradeTypes",
+  "namespace": "ingestd.avro.schemas.raw.tradeTypes",
   "type": "record",
   "field": [
-    {"name": "id", "type": "string"},
-    {"name": "name", "type": "string"},
+    {"name": "id", "type": "string","default": "NONE"},
+    {"name": "name", "type": "string","default": "NONE"},
     {"name": "is_sale", "type": "boolean"},
     {"name": "is_market", "type": "boolean"}
   ]

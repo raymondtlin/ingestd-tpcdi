@@ -1,22 +1,22 @@
 
 {
-  "name": "finwirefin-value",
+  "name": "finwireFINValue",
   "namespace": "ingestd.avro.schemas.value.finwirefin",
   "type": "record",
   "fields": [
-    {"name": "year", "type": "string"},
-    {"name": "quarter", "type": "int"},
-    {"name": "qtrstartdate", "type": "string"},
-    {"name": "postingdate", "type": "string"},
-    {"name": "revenue", "type": "long"},
-    {"name": "earnings", "type": "long"},
-    {"name": "eps", "type": "float"},
-    {"name": "diluted_eps", "type": "float"},
-    {"name": "margin", "type": "long"},
-    {"name": "inventory", "type": "long"},
-    {"name": "assets", "type": "long"},
-    {"name": "liabilities", "type": "long"},
-    {"name": "sh_out", "type": "long"},
-    {"name": "diluted_sh_out", "type": "long"}
+    {"name": "year", "type": "string","default": "NONE"},
+    {"name": "quarter", "type": "int","default":  0},
+    {"name": "qtrstartdate", "type": "string","default": "NONE"},
+    {"name": "posting_date", "type": "string","default": "NONE"},
+    {"name": "revenue", "type": "long","default": 0},
+    {"name": "earnings", "type": "long","default": 0},
+    {"name": "eps", "type": "float","default":  0.0},
+    {"name": "diluted_eps", "type": "float","default": 0.0},
+    {"name": "margin", "type": "long","default":  0},
+    {"name": "inventory", "type": "long","default":  0},
+    {"name": "assets", "type": "long","default": 0},
+    {"name": "liabilities", "type": "long","default": 0},
+    {"name": "sh_out", "type": "long","default":  0},
+    {"name": "diluted_sh_out", "type": "long", "default": 0}
   ]
 }

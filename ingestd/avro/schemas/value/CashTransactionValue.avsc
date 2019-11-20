@@ -1,12 +1,12 @@
 {
-  "name": "cashtransaction-value",
+  "name": "cashTransactionValue",
   "namespace": "ingestd.avro.schemas.value.cashtransaction",
   "type": "record",
   "fields": [
-    {"name": "cdc_flag", "type": ["string","null"]},
-    {"name": "ca_id", "type":  "string"},
-    {"name": "dts", "type":  "string"},
-    {"name": "amt", "type":  "long"},
-    {"name": "name", "type":  "string"}
+    {"name": "cdc_flag", "type": ["string","null"], "default": "I"},
+    {"name": "ca_id", "type":  "string", "default": "NONE"},
+    {"name": "dts", "type":  "string", "default": "NONE"},
+    {"name": "amt", "type":  "long", "default":  0},
+    {"name": "name", "type":  "string", "default": "NONE"}
   ]
 }

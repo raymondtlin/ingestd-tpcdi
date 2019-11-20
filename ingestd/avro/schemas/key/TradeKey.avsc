@@ -1,12 +1,10 @@
 {
-  "name": "trade-key",
+  "name": "tradeKey",
   "namespace": "ingestd.avro.schemas.key.trade",
   "type": "record",
   "fields": [
-    {"name": "cdc_dsn", "type": "string"},
-    {"name": "id", "type": "string"},
+    {"name": "id", "type": "string","default": "NONE"},
     {"name": "dts",
-      "type": "string",
-      "logical_type": "date"}
+      "type": "string","default": "NONE"}
   ]
 }

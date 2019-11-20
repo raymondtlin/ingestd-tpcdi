@@ -3,8 +3,8 @@
   "namespace": "ingestd.avro.schemas.raw.industry",
   "type": "record",
   "fields": [
-    {"name": "id","type": "string"},
-    {"name": "name", "type": "string"},
-    {"name": "scid", "type": "string"}
+    {"name": "id","type": "string","default": "NONE"},
+    {"name": "name", "type": "string","default": "NONE"},
+    {"name": "scid", "type": "string","default": "NONE"}
   ]
 }

@@ -1,9 +1,9 @@
 {
-  "name": "taxrate",
+  "name": "taxrateValue",
   "namespace": "ingestd.avro.schemas.value.taxrate",
   "type": "record",
   "fields": [
-    {"name": "name", "type": "string"},
-    {"name": "rate", "type": "float"}
+    {"name": "name", "type": "string","default": "NONE"},
+    {"name": "rate", "type": "float", "default": 0.0}
   ]
 }

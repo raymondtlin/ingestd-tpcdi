@@ -1,12 +1,12 @@
 {
-  "name": "watchhistory-value",
+  "name": "watchhistoryValue",
   "namespace": "ingestd.avro.schemas.value.watchhistory",
   "type": "record",
   "fields": [
-    {"name": "cdc_flag", "type": "string"},
-    {"name": "customer_id","type": "string"},
-    {"name": "symb", "type": "string"},
-    {"name": "dts", "type": "string"},
-    {"name": "action", "type": "string"}
+    {"name": "cdc_flag", "type": "string","default": "NONE"},
+    {"name": "customer_id","type": "string","default": "NONE"},
+    {"name": "symb", "type": "string","default": "NONE"},
+    {"name": "dts", "type": "string","default": "NONE"},
+    {"name": "action", "type": "string","default": "NONE"}
   ]
 }

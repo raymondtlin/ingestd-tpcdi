@@ -1,13 +1,13 @@
 {
   "name": "watchhistory",
-  "namespace": "ingestd.avro.schemas.raw.watchhistory",
+  "namespace": "ingestd.avro.schemas.raw.watchHistory",
   "type": "record",
   "fields": [
-    {"name": "cdc_flag", "type": "string"},
-    {"name": "cdc_dsn", "type": "string"},
-    {"name": "customer_id","type": "string"},
-    {"name": "symb", "type": "string"},
-    {"name": "dts", "type": "string"},
-    {"name": "action", "type": "string"}
+    {"name": "cdc_flag", "type": "string","default": "NONE"},
+    {"name": "cdc_dsn", "type": "string","default": "NONE"},
+    {"name": "customer_id","type": "string","default": "NONE"},
+    {"name": "symb", "type": "string","default": "NONE"},
+    {"name": "dts", "type": "string","default": "NONE"},
+    {"name": "action", "type": "string","default": "NONE"}
   ]
 }

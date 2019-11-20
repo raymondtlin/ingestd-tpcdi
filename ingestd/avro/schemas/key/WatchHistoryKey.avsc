@@ -1,6 +1,6 @@
 {
-  "name": "watchhistory-key",
+  "name": "watchHistoryKey",
   "namespace": "ingestd.avro.schemas.key.watchhistory",
-  "type": "string",
-  "fields": {"name": "cdc_dsn"}
+  "type": "record",
+  "fields": [{"name": "cdc_dsn", "type": "string","default": "NONE"}]
 }
