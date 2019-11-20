@@ -8,7 +8,16 @@ from confluent_kafka import avro
 
 
 class FileSource(object):
+    """
+    Abstraction for an opened file.
+    """
     def __init__(self, **kwargs):
+        """
+        :param kwargs: file_path          (str): source file path
+                       schema_path        (str): avro schema path
+                       key_fields   (list(str)): field as list or list of fields to use as the composite key
+                       parser            (func): parsing function as defined in ingestd/strategies.py
+        """
         self.file_path = kwargs.pop('file_path', None)
         self.schema_path = kwargs.pop('schema_path', None)
         self.schema = self.get_schema(self.schema_path)
@@ -53,19 +62,27 @@ class FileSource(object):
 
     def set_record_values(self, value_fields: list = None) -> None:
         if value_fields is not None:
-            setattr(self.value_fields, set(value for value in value_fields if value not in self.key_fields))
+            setattr(self.value_fields, list(value for value in value_fields if value not in self.key_fields))
         else:
-            setattr(self.value_fields,  set(value for value in self.fields if value not in self.key_fields))
+            setattr(self.value_fields, list(value for value in self.fields if value not in self.key_fields))
 
     def produce_payload(self, specific_flag: bool = False):
         """
         Creates a message which can be sent to a Kafka Producer.
         :param specific_flag: if set to False, yields named tuple of all fields \
-                              if set as True, yields dict with fields separated by specified schema
+                              if set as True, yields a dict with two keys [key, value]
         :return: namedtuple or dict
         """
+        # generic/specificPayload is an homage paid to General/SpecificRecord in the Kafka-AvroSerializer java source.
+
+        # genericPayload is a namedtuple of the field names mapped to field values
         genericPayload = collections.namedtuple('Payload_', self.fields)
+
+        # specificPayload is a genericPayload as a dict with specified fields in "key" and "value"
         specificPayload = {}
+
+        # You might wonder if there is a value error when calling parseDelimited under the guise of parse\
+        # The answer is that there isn't because we "infer" the delimiter from the first line.
 
         for ntuple in map(genericPayload._make, iter(self.parse())):
             if not specific_flag:
@@ -77,6 +94,8 @@ class FileSource(object):
                 specificPayload['record_key_names'] = list(self.key_fields)
                 specificPayload['record_value_names'] = list(self.value_fields)
 
+                # If the message consists of a composite key with multiple fields,\
+                # we should iterate over them and zip the contents
                 if len(specificPayload['record_key_names']) > 1:
                     specificPayload['key'] = dict({k: v for k, v in zip(specificPayload.pop('record_key_names'),
                                                                         specificPayload.pop('record_keys'))})
