@@ -1,5 +1,5 @@
 {
-  "name": "statustypekey",
+  "name": "statusTypeKey",
   "namespace": "ingestd.avro.schemas.key.statustype",
   "type": "record",
   "fields": [{"name": "id", "type": "string", "default" : "NONE"}]

@@ -2,8 +2,8 @@
   "name": "tradeHistoryKey",
   "type": "record",
   "fields": [
-    {"name": "th_t_id", "type": "string"},
-    {"name": "th_dts", "type": "string"},
-    {"name": "th_s_id", "type": "string"}
+    {"name": "th_t_id", "type": "string","default": "NONE"},
+    {"name": "th_dts", "type": "string","default": "NONE"},
+    {"name": "th_s_id", "type": "string","default": "NONE"}
   ]
 }

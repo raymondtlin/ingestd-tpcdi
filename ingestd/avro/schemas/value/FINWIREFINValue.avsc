@@ -1,13 +1,13 @@
 
 {
-  "name": "finwirefinValue",
+  "name": "finwireFINValue",
   "namespace": "ingestd.avro.schemas.value.finwirefin",
   "type": "record",
   "fields": [
     {"name": "year", "type": "string","default": "NONE"},
     {"name": "quarter", "type": "int","default":  0},
     {"name": "qtrstartdate", "type": "string","default": "NONE"},
-    {"name": "postingdate", "type": "string","default": "NONE"},
+    {"name": "posting_date", "type": "string","default": "NONE"},
     {"name": "revenue", "type": "long","default": 0},
     {"name": "earnings", "type": "long","default": 0},
     {"name": "eps", "type": "float","default":  0.0},

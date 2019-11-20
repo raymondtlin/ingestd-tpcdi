@@ -3,8 +3,8 @@
   "namespace": "ingestd.avro.schemas.key.trade",
   "type": "record",
   "fields": [
-    {"name": "id", "type": "string"},
+    {"name": "id", "type": "string","default": "NONE"},
     {"name": "dts",
-      "type": "string"}
+      "type": "string","default": "NONE"}
   ]
 }

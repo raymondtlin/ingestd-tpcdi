@@ -1,5 +1,5 @@
 {
-  "name": "cashtransactionValue",
+  "name": "cashTransactionValue",
   "namespace": "ingestd.avro.schemas.value.cashtransaction",
   "type": "record",
   "fields": [

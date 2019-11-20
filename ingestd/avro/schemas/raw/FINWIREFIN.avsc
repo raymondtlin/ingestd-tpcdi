@@ -1,13 +1,14 @@
 {
-  "name": "finwirefin",
+  "name": "finwireFIN",
   "type": "record",
+  "namespace": "ingestd.avro.schemas.raw.finwireFIN",
   "fields": [
-    {"name": "pts", "type": "string"},
-    {"name": "rectype", "type": "string"},
-    {"name": "year", "type": "string"},
-    {"name": "quarter", "type": "int"},
-    {"name": "qtrstartdate", "type": "string"},
-    {"name": "postingdate", "type": "string"},
+    {"name": "pts", "type": "string","default": "NONE"},
+    {"name": "rec_type", "type": "string","default": "NONE"},
+    {"name": "year", "type": "string","default": "NONE"},
+    {"name": "quarter", "type": "int","default":0},
+    {"name": "qtrstartdate", "type": "string","default": "NONE"},
+    {"name": "posting_date", "type": "string","default": "NONE"},
     {"name": "revenue", "type": "long"},
     {"name": "earnings", "type": "long"},
     {"name": "eps", "type": "float"},
@@ -18,6 +19,6 @@
     {"name": "liabilities", "type": "long"},
     {"name": "sh_out", "type": "long"},
     {"name": "diluted_sh_out", "type": "long"},
-    {"name": "coname_or_cik", "type": "string"}
+    {"name": "coname_or_cik", "type": "string","default": "NONE"}
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "holdinghistorykey",
+  "name": "holdingHistoryKey",
   "namespace": "ingestd.avro.schemas.key.holdinghistory",
    "type": "record",
   "fields": [{"name": "cdc_dsn", "type": "string", "default" : "NONE"}]

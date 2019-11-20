@@ -1,1 +1,1 @@
-{"name": "industrykey","namespace": "ingestd.avro.schemas.key.industry","type": "record","fields": [{"name": "id","type": "string","default": "NONE"}]}
+{"name": "industryKey","namespace": "ingestd.avro.schemas.key.industry","type": "record","fields": [{"name": "id","type": "string","default": "NONE"}]}
