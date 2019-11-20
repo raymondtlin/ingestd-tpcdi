@@ -1,8 +1,8 @@
 
 {
-  "name": "holdinghistory-value",
+  "name": "holdinghistoryValue",
   "namespace": "ingestd.avro.schemas.value.holdinghistory",
-  "type": "string",
+  "type": "record",
   "fields": [
     {"name": "cdc_flag","type": "string","default": "NONE"},
     {"name": "h_t_id", "type": "string","default": "NONE"},

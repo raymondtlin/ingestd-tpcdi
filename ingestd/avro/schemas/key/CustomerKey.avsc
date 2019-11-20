@@ -1,4 +1,4 @@
-{ "name":"customerkey",
+{ "name":"customerKey",
   "namespace": "ingestd.avro.schemas.key.customer",
   "type": "record",
   "fields": [{"name": "id", "type": "string", "default" : "NONE"}]

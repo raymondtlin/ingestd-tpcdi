@@ -1,19 +1,78 @@
 {
   "name": "tradeValue",
   "namespace": "ingestd.avro.schemas.value.trade",
-  "type": "string",
+  "type": "record",
   "fields": [
-    {"name": "cdc_flag","type": "string","default": "NONE"},
-    {"name": "status_type_id", "type": "string","default": "NONE"},
-    {"name": "trade_type_id", "type": "string","default": "NONE"},
-    {"name": "is_cash", "type": "boolean"},
-    {"name": "symb", "type": "string","default": "NONE"},
-    {"name": "qty", "type": "int","default": 0},
-    {"name": "bidprice", "type": "float","default": 0.0},
-    {"name": "ca_id", "type": "string","default": "NONE"},
-    {"name": "execname", "type": "string","default": "NONE"},
-    {"name": "trade_price", "type": ["float","null"],"default": 0.0},
-    {"name": "fee_chrgd", "type": ["int","null"],"default": 0},
-    {"name": "comm", "type": ["long","null"],"default": 0},
-    {"name": "tax", "type": ["long","null"], "default": 0}
+    {
+      "name": "status_type_id",
+      "type": "string",
+      "default": "NONE"
+    },
+    {
+      "name": "trade_type_id",
+      "type": "string",
+      "default": "NONE"
+    },
+    {
+      "name": "is_cash",
+      "type": "boolean"
+    },
+    {
+      "name": "symb",
+      "type": "string",
+      "default": "NONE"
+    },
+    {
+      "name": "qty",
+      "type": "int",
+      "default": 0
+    },
+    {
+      "name": "bid_price",
+      "type": "float",
+      "default": 0.0
+    },
+    {
+      "name": "ca_id",
+      "type": "string",
+      "default": "NONE"
+    },
+    {
+      "name": "exec_name",
+      "type": "string",
+      "default": "NONE"
+    },
+    {
+      "name": "trade_price",
+      "type": [
+        "float",
+        "null"
+      ],
+      "default": 0.0
+    },
+    {
+      "name": "fee_chrgd",
+      "type": [
+        "int",
+        "null"
+      ],
+      "default": 0
+    },
+    {
+      "name": "comm",
+      "type": [
+        "long",
+        "null"
+      ],
+      "default": 0
+    },
+    {
+      "name": "tax",
+      "type": [
+        "long",
+        "null"
+      ],
+      "default": 0
+    }
   ]
+}

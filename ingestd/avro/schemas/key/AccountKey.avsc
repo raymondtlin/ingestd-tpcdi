@@ -1,5 +1,5 @@
 {
-  "name": "accountkey",
+  "name": "accountKey",
   "namespace": "ingestd.avro.schemas.key.account",
   "type": "record",
   "fields": [{"name": "cdc_dsn", "type": "string", "default" : "NONE"}]

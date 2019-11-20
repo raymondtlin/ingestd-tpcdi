@@ -21,7 +21,7 @@
     {"name": "maritalstatus", "type": ["string","null"],"default": "NONE"},
     {"name": "age", "type": ["int","null"],"default": 0},
     {"name": "creditrating", "type": ["int","null"],"default": 0},
-    {"name": "own_or_rent_flag", "type": ["string","null"],"default": "NONE"},
+    {"name": "own_or_rent_flag", "type": ["string","null"],"default": "U"},
     {"name": "employer","type": ["string","null"],"default": "NONE"},
     {"name": "qty_creditcards", "type": ["string","null"],"default": "NONE"},
     {"name": "networth", "type": ["long","null"],"default": 0}
