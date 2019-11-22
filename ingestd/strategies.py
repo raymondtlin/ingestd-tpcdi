@@ -4,7 +4,7 @@ import collections
 import itertools
 import re
 
-from ingestd.sources import FileSource
+from lxml import etree
 
 
 if sys.version_info[0] > 2:
@@ -25,11 +25,32 @@ class RecordParsingStrategy:
 
 
 def parseXML(self):
-    for record in self.stream():
-        yield record
+    def parse_from_unicode(unicode_str):
+        parser = etree.XMLParser(encoding='UTF-8', remove_blank_text=True)
+        s = unicode_str.encode('UTF-8')
+        return etree.fromstring(s, parser)
+
+    root = parse_from_unicode(open(self.file_path).read())
+
+    for elem in root:
+        record_items = []
+
+        for subelem in elem.find('*'):
+            if subelem:
+                attrs = [dict({child_elem.tag: child_elem.text}) for child_elem in subelem.iter()]
+            if attrs:
+                record_items.append(attrs)
+
+        return tuple(elem.attrib, record_items)
 
 
 def parseDelimited(self, delimiter: str = None):
+    """
+
+    :param self: FileSource object instance
+    :param delimiter: single character string
+    :return:
+    """
     if delimiter is not None:
         _delimiter = delimiter
     else:
@@ -44,6 +65,11 @@ def parseDelimited(self, delimiter: str = None):
 
 
 def parseFixedWidth(self):
+    """
+
+    :param self: FileSource object instance
+    :return:
+    """
 
     _fixedwidth_lkup = {"CMP": (15, 3, 60, 10, 4, 2, 4, 8, 80, 80, 12, 25, 20, 24, 46, 150),
                         "SEC": (15, 3, 15, 6, 4, 706, 13, 8, 8, 12, 60),

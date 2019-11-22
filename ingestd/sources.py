@@ -33,6 +33,10 @@ class FileSource(object):
         else:
             self.file_format = self.file_path.split('.')[-1].lower()
 
+    def read(self):
+        with open(self.file_path) as handle:
+            yield self.read()
+
     def stream(self):
         """
         Creates file handle, generates lines
