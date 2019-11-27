@@ -1,0 +1,39 @@
+steps:
+- name:
+  args: []
+  env: []
+  dir:
+  id:
+  waitFor:
+  entrypoint:
+  secretEnv:
+  volumes:
+  timeout:
+
+timeout:
+logsBucket:
+options:
+  env:
+  secretEnv:
+  volumes:
+  sourceProvenanceHash: ['SHA384']
+  machineType:
+  diskSizeGb:
+  substitutionOption:
+  logStreamingOption:
+  logging:
+substitutions:
+tags:
+secrets:
+- kmsKeyName: projects/[PROJECT_ID]/locations/us-west1/keyRings/ccloud/cryptoKeys/cryptokey-confluent
+  secretEnv:
+    BOOTSTRAP_SERVERS:"CiQAAjGM+r+1rU2HkesRfuMTS0rIIdQMogfxZh/FGs5881GIhnQSVABKDsHPd0G20U/swOMHjx1dTCP+LShkIaQPna2ZM4FuYhksanccp7SWAZrz4lXDDXL7MYO4RH25ptxUJKg6dp5knIiNIjwn1BBxcdLiKAc0+mj49Q=="
+    CCLOUD_KEY="CiQAAjGM+s65KjGC5SuL7xz8S97HtR1MCn1BB7IE1Fr0iWS/P1ESOQBKDsHPIQtcpS5SWTcu93UpQ5R9y0rAKEveaorZAZcX6TvrL4P94qL0coxApOLtuRVQ/nxH1kliDQ=="
+    CCLOUD_SECRET="CiQAAjGM+ptPY5AbNTzaXpP1bOcX67rJAocDJF9kmjJZkl8M00cSaQBKDsHPhV1aSCn5B1k3o2eYdwR+F9U15zWTzQO8ryb2FDAHRyxAI467ST30orhMwRLunXu2C9yMcviz2Mx9X+MGGgpXZkoZdtDwKnrcBRE2GQhYGbws5WkVrjIXiFg28AayCMDeWWl/wg=="
+    SCHEMA_REGISTRY_URL="CiQAAjGM+vkScmHAkLlo4ipy1bsqtcxuzXk0l/uNgvFRDBeBw2sSWwBKDsHP1VzvHPYqk/RpprvvE94/kbzvxC+vonarEWYoJ6DdvRyKeA8kJgTDnLaHlhq1c6NH/Ynfgwu6c4j3HiE2NN8rt1xy7M+8K+Ws7X5YAxAqPe5Ef7hPFlI="
+    SCHEMA_REGISTRY_KEY="CiQAAjGM+in4mfGe6Z9JoXvrb7QAqCgeUalQGTD4tCVkL0jy53YSOQBKDsHPSKNyCXLtT8SVSUwurA5HNvOucoDDEVeI9su/WYKhFmV21ze40lM2p8I839Rd+WOilvC3aw=="
+    SCHEMA_REGISTRY_SECRET="CiQAAjGM+pKpaqw+smtPnTgJr/NbL7q9eRY5XjwLgR9TvMEFVU8SIQBKDsHP1TqzqDlqMlO7oivD0wZPKDccMAUTf3CxYPAt0g=="
+    CCLOUD_REST_ENDPOINT="CiQAAjGM+g8x8rF1OeWrPLuOdkgeYmD+u9sJlIsRq8/59ygoe7ASWABKDsHPy2AanOSiNWdd0z3kMc3yKbpgbKEaJ7wdTZD7/O5wZnqwpvVK7VrJqyxXjwK25zdi6XfKXhUzH6VhNcJHbanNeJhXpAqcvFHCRIcy3oxLrxQIhBI="
+images:
+- []
+artifacts:
