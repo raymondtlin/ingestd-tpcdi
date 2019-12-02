@@ -1,17 +1,46 @@
 steps:
-- name:
-  args: []
-  env: []
-  dir:
-  id:
+- name: gcr.io/cloud-builders/docker
+  args: ['pull', 'confluentinc/ksqldb-server:latest']
+  id: "Pull"
+- name: gcr.io/cloud-builders/docker
+  args: ['tag', 'confluentinc/ksqldb-server', '$PROJECT_ID/ksqldb-server']
+  id: "Tag"
+  waitFor:
+  - "Pull"
+- name: gcr.io/cloud-builders/docker
+  args: ['run', '$PROJECT_ID/ksqldb-server']
+  id: "Run-Server"
+  env: [
+         'KSQL_BOOTSTRAP_SERVERS=${BOOTSTRAP_SERVERS}'
+         'KSQL_LISTENERS=http://0.0.0.0:8088'
+         'KSQL_SASL_JAAS_CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required\
+            username=${CCLOUD_KEY} \
+            password=${CCLOUD_SECRET}'
+         'KSQL_SECURITY_PROTOCOL=SASL_SSL'
+         'KSQL_SASL_MECHANISM=PLAIN'
+         'KSQL_KSQL_INTERNAL_TOPIC_REPLICAS=3'
+         'KSQL_KSQL_SINK_REPLICAS=3'
+         'KSQL_KSQL_STREAMS_REPLICATION_FACTOR=3'
+         'KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR=3'
+         'KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE=true'
+         'KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE=true'
+         'KSQL_KSQL_SCHEMA_REGISTRY_BASIC_AUTH_CREDENTIALS_SOURCE=user_info'
+         'KSQL_KSQL_SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO=${SCHEMA_REGISTRY_KEY}:${SCHEMA_REGISTRY_SECRET}'
+         'KSQL_KSQL_SCHEMA_REGISTRY_URL=${SCHEMA_REGISTRY_URL}'
+  ]
+- name: gcr.io/cloud-builders/gsutil
+  args: ['cp', 'gs://ingestd-logs/results.zip', 'previous_results.zip']
+  id: "Load-Previous"
+- name: gcr.io/cloud-builders/gsutil
+  args: ['cp', 'new_results.zip', 'gs://ingestd-logs/results.zip']
+  id: "Save-New"
   waitFor:
   entrypoint:
   secretEnv:
   volumes:
   timeout:
-
 timeout:
-logsBucket:
+logsBucket: 'gs://ingestd-logs/'
 options:
   env:
   secretEnv:
@@ -25,15 +54,15 @@ options:
 substitutions:
 tags:
 secrets:
-- kmsKeyName: projects/[PROJECT_ID]/locations/us-west1/keyRings/ccloud/cryptoKeys/cryptokey-confluent
+- kmsKeyName: projects/stalwart-fx-257402/locations/us-west1/keyRings/ccloud/cryptoKeys/cryptokey-confluent
   secretEnv:
-    BOOTSTRAP_SERVERS:"CiQAAjGM+r+1rU2HkesRfuMTS0rIIdQMogfxZh/FGs5881GIhnQSVABKDsHPd0G20U/swOMHjx1dTCP+LShkIaQPna2ZM4FuYhksanccp7SWAZrz4lXDDXL7MYO4RH25ptxUJKg6dp5knIiNIjwn1BBxcdLiKAc0+mj49Q=="
-    CCLOUD_KEY="CiQAAjGM+s65KjGC5SuL7xz8S97HtR1MCn1BB7IE1Fr0iWS/P1ESOQBKDsHPIQtcpS5SWTcu93UpQ5R9y0rAKEveaorZAZcX6TvrL4P94qL0coxApOLtuRVQ/nxH1kliDQ=="
-    CCLOUD_SECRET="CiQAAjGM+ptPY5AbNTzaXpP1bOcX67rJAocDJF9kmjJZkl8M00cSaQBKDsHPhV1aSCn5B1k3o2eYdwR+F9U15zWTzQO8ryb2FDAHRyxAI467ST30orhMwRLunXu2C9yMcviz2Mx9X+MGGgpXZkoZdtDwKnrcBRE2GQhYGbws5WkVrjIXiFg28AayCMDeWWl/wg=="
-    SCHEMA_REGISTRY_URL="CiQAAjGM+vkScmHAkLlo4ipy1bsqtcxuzXk0l/uNgvFRDBeBw2sSWwBKDsHP1VzvHPYqk/RpprvvE94/kbzvxC+vonarEWYoJ6DdvRyKeA8kJgTDnLaHlhq1c6NH/Ynfgwu6c4j3HiE2NN8rt1xy7M+8K+Ws7X5YAxAqPe5Ef7hPFlI="
-    SCHEMA_REGISTRY_KEY="CiQAAjGM+in4mfGe6Z9JoXvrb7QAqCgeUalQGTD4tCVkL0jy53YSOQBKDsHPSKNyCXLtT8SVSUwurA5HNvOucoDDEVeI9su/WYKhFmV21ze40lM2p8I839Rd+WOilvC3aw=="
-    SCHEMA_REGISTRY_SECRET="CiQAAjGM+pKpaqw+smtPnTgJr/NbL7q9eRY5XjwLgR9TvMEFVU8SIQBKDsHP1TqzqDlqMlO7oivD0wZPKDccMAUTf3CxYPAt0g=="
-    CCLOUD_REST_ENDPOINT="CiQAAjGM+g8x8rF1OeWrPLuOdkgeYmD+u9sJlIsRq8/59ygoe7ASWABKDsHPy2AanOSiNWdd0z3kMc3yKbpgbKEaJ7wdTZD7/O5wZnqwpvVK7VrJqyxXjwK25zdi6XfKXhUzH6VhNcJHbanNeJhXpAqcvFHCRIcy3oxLrxQIhBI="
+    BOOTSTRAP_SERVERS: "CiQAAjGM+r+1rU2HkesRfuMTS0rIIdQMogfxZh/FGs5881GIhnQSVABKDsHPd0G20U/swOMHjx1dTCP+LShkIaQPna2ZM4FuYhksanccp7SWAZrz4lXDDXL7MYO4RH25ptxUJKg6dp5knIiNIjwn1BBxcdLiKAc0+mj49Q=="
+    CCLOUD_KEY: "CiQAAjGM+s65KjGC5SuL7xz8S97HtR1MCn1BB7IE1Fr0iWS/P1ESOQBKDsHPIQtcpS5SWTcu93UpQ5R9y0rAKEveaorZAZcX6TvrL4P94qL0coxApOLtuRVQ/nxH1kliDQ=="
+    CCLOUD_SECRET: "CiQAAjGM+ptPY5AbNTzaXpP1bOcX67rJAocDJF9kmjJZkl8M00cSaQBKDsHPhV1aSCn5B1k3o2eYdwR+F9U15zWTzQO8ryb2FDAHRyxAI467ST30orhMwRLunXu2C9yMcviz2Mx9X+MGGgpXZkoZdtDwKnrcBRE2GQhYGbws5WkVrjIXiFg28AayCMDeWWl/wg=="
+    SCHEMA_REGISTRY_URL: "CiQAAjGM+vkScmHAkLlo4ipy1bsqtcxuzXk0l/uNgvFRDBeBw2sSWwBKDsHP1VzvHPYqk/RpprvvE94/kbzvxC+vonarEWYoJ6DdvRyKeA8kJgTDnLaHlhq1c6NH/Ynfgwu6c4j3HiE2NN8rt1xy7M+8K+Ws7X5YAxAqPe5Ef7hPFlI="
+    SCHEMA_REGISTRY_KEY: "CiQAAjGM+in4mfGe6Z9JoXvrb7QAqCgeUalQGTD4tCVkL0jy53YSOQBKDsHPSKNyCXLtT8SVSUwurA5HNvOucoDDEVeI9su/WYKhFmV21ze40lM2p8I839Rd+WOilvC3aw=="
+    SCHEMA_REGISTRY_SECRET: "CiQAAjGM+pKpaqw+smtPnTgJr/NbL7q9eRY5XjwLgR9TvMEFVU8SIQBKDsHP1TqzqDlqMlO7oivD0wZPKDccMAUTf3CxYPAt0g=="
+    CCLOUD_REST_ENDPOINT: "CiQAAjGM+g8x8rF1OeWrPLuOdkgeYmD+u9sJlIsRq8/59ygoe7ASWABKDsHPy2AanOSiNWdd0z3kMc3yKbpgbKEaJ7wdTZD7/O5wZnqwpvVK7VrJqyxXjwK25zdi6XfKXhUzH6VhNcJHbanNeJhXpAqcvFHCRIcy3oxLrxQIhBI="
 images:
 - []
 artifacts:
