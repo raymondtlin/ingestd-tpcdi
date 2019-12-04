@@ -85,7 +85,7 @@ class FileSource(object):
         # specificPayload is a genericPayload as a dict with specified fields in "key" and "value"
         specificPayload = {}
 
-        # You might wonder if there is a value error when calling parseDelimited under the guise of parse\
+        # You might wonder if there is a value error when calling parseDelimited under the guise of parse \
         # The answer is that there isn't because we "infer" the delimiter from the first line.
 
         for ntuple in map(genericPayload._make, iter(self.parse())):
