@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --file ksqldb.yaml
+    kompose.version: 1.19.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ksqldb-cli
+  name: ksqldb-cli
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --file ksqldb.yaml
+        kompose.version: 1.19.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ksqldb-cli
+    spec:
+      containers:
+      - command:
+        - /bin/sh
+        image: confluentinc/ksqldb-cli:0.6.0
+        name: ksqldb-cli
+        resources: {}
+        tty: true
+      restartPolicy: Always
+status: {}

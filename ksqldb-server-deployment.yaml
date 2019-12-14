@@ -1,0 +1,72 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --file ksqldb.yaml
+    kompose.version: 1.19.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ksqldb-server
+  name: ksqldb-server
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --file ksqldb.yaml
+        kompose.version: 1.19.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ksqldb-server
+    spec:
+      containers:
+      - env:
+        - name: KSQL_BOOTSTRAP_SERVERS
+          valueFrom:
+            secretKeyRef:
+              name: confluent-cloud
+              key: BOOTSTRAP_SERVERS
+        - name: KSQL_KSQL_INTERNAL_TOPIC_REPLICAS
+          value: 3
+        - name: KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE
+          value: true
+        - name: KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE
+          value: true
+        - name: KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR
+          value: 3
+        - name: KSQL_KSQL_SINK_REPLICAS
+          value: 3
+        - name: KSQL_KSQL_STREAMS_REPLICATION_FACTOR
+          value: 3
+        - name: KSQL_LISTENERS
+          value: http://0.0.0.0:8088
+        - name: KSQL_SASL_JAAS_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: confluent-cloud
+              key: KSQL_SASL_JAAS_CONFIG
+        - name: KSQL_SASL_MECHANISM
+          value: PLAIN
+        - name: KSQL_SECURITY_PROTOCOL
+          value: SASL_SSL
+        - name: SCHEMA_REGISTRY_URL
+          valueFrom:
+            secretKeyRef:
+              name: confluent-cloud
+              key: SCHEMA_REGISTRY_URL
+        - name: KSQL_KSQL_SCHEMA_REGISTRY_BASIC_AUTH_CREDENTIALS_SOURCE
+          value: user_info
+        - name: KSQL_KSQL_SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO
+          valueFrom:
+            secretKeyRef:
+              name: confluent-cloud
+              key: KSQL_SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO
+        image: confluentinc/ksqldb-server:0.6.0
+        name: ksqldb-server
+        ports:
+        - containerPort: 8088
+        resources: {}
+      hostname: ksqldb-server
+      restartPolicy: Always
+status: {}
