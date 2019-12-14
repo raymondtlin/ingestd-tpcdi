@@ -1,0 +1,133 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: kafka-ksqldb-server-jmx-configmap
+  labels:
+    app: ksqldb-server
+    release: kafka
+data:
+  jmx-ksqldb-server-prometheus.yml: |+
+    jmxUrl: service:jmx:rmi:///jndi/rmi://localhost:5555/jmxrmi
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    ssl: false
+    rules:
+    - pattern: 'io.confluent.ksqldb.metrics<type=ksql-engine-query-stats>([^:]+):'
+      name: "ksqldb_server_metrics_$1"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-ksqldb-server
+  labels:
+    app: ksqldb-server
+spec:
+  ports:
+    - name: ksqldb-server
+      port: 8088
+  selector:
+    app: ksqldb-server
+    release: kafka
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-ksqldb-server
+  labels:
+    app: ksqldb-server
+    release: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ksqldb-server
+      release: kafka
+  template:
+    metadata:
+      labels:
+        app: ksqldb-server
+        release: kafka
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5556"
+    spec:
+      containers:
+        - name: prometheus-jmx-exporter
+          image: "solsson/kafka-prometheus-jmx-exporter@sha256:6f82e2b0464f50da8104acd7363fb9b995001ddff77d248379f8788e78946143"
+          imagePullPolicy: "IfNotPresent"
+          command:
+          - java
+          - -XX:+UnlockExperimentalVMOptions
+          - -XX:+UseCGroupMemoryLimitForHeap
+          - -XX:MaxRAMFraction=1
+          - -XshowSettings:vm
+          - -jar
+          - jmx_prometheus_httpserver.jar
+          - "5556"
+          - /etc/jmx-ksql-server/jmx-ksql-server-prometheus.yml
+          ports:
+          - containerPort: 5556
+          resources:
+            {}
+      volumeMounts:
+        - name: ksql-queries
+          mountPath: /etc/ksql/queries
+      env:
+        - name: KSQL_BOOTSTRAP_SERVERS
+          valueFrom:
+            secretKeyRef:
+              name: ccloud-kafka
+              key: BOOTSTRAP_SERVERS
+        - name: KSQL_SASL_JAAS_CONFIG
+          value: >
+            org.apache.kafka.common.security.plain.PlainLoginModule required
+            username=$CCLOUD_KEY
+            password=$CCLOUD_SECRET;
+        - name: CCLOUD_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ccloud-kafka
+              key: CCLOUD_KEY
+        - name: CCLOUD_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ccloud-kafka
+              key: CCLOUD_SECRET
+        - name: KSQL_KSQL_SERVICE_ID
+          value: kafka
+        - name: KSQL_KSQL_SCHEMA_REGISTRY_URL
+          valueFrom: 
+            secretKeyRef:
+              name: ccloud-kafka
+              key: SCHEMA_REGISTRY_URL
+        - name: KSQL_HEAP_OPTS
+          value: "-Xms512M -Xmx512M"
+        - name: KSQL_KSQL_QUERIES_FILE
+          value: /etc/ksql/queries/queries.sql
+        - name: KSQL_JMX_PORT
+          value: "5555"
+        - name: KSQL_SECURITY_PROTOCOL
+          value: SASL_SSL
+        - name: KSQL_SASL_MECHANISM
+          value: PLAIN
+        - name: KSQL_KSQL_INTERNAL_TOPIC_REPLICAS
+          value: 3
+        - name: KSQL_KSQL_SINK_REPLICAS
+          value: 3
+        - name: KSQL_KSQL_STREAMS_REPLICATION_FACTOR
+          value: 3
+        - name: KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR
+          value: 3
+        - name: KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE
+          value: true
+        - name: KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE
+          value: true
+      volumes:
+        - name: jmx-config
+          configMap:
+            name: kafka-cp-ksql-server-jmx-configmap
+        - name: ksql-queries
+          configMap:
+            name: kafka-cp-ksql-server-ksql-queries-configmap
