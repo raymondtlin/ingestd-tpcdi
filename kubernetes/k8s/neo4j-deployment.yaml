@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: neo4j
+  name: neo4j
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.19.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: neo4j
+    spec:
+      containers:
+      - env:
+        - name: NEO4J_ACCEPT_LICENSE_AGREEMENT
+          value: "yes"
+        - name: NEO4J_AUTH
+          value: neo4j/connect
+        - name: NEO4J_dbms_memory_heap_max__size
+          value: 8G
+        - name: NEO4J_kafka_bootstrap_servers
+          value: broker:9093
+        - name: NEO4J_kafka_zookeeper_connect
+          value: zookeeper:2181
+        image: neo4j:3.4-enterprise
+        name: neo4j
+        ports:
+        - containerPort: 7474
+        - containerPort: 7687
+        resources: {}
+      restartPolicy: Always
+status: {}

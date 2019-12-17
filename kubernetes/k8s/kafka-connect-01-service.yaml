@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: kafka-connect-01
+  name: kafka-connect-01
+spec:
+  ports:
+  - name: "8083"
+    port: 8083
+    targetPort: 8083
+  selector:
+    io.kompose.service: kafka-connect-01
+status:
+  loadBalancer: {}

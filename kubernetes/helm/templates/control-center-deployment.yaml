@@ -1,0 +1,72 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.19.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: control-center
+  name: control-center
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.19.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: control-center
+    spec:
+      containers:
+      - args:
+        - bash
+        - -c
+        - "echo \"Waiting two minutes for Kafka brokers to start and \n       necessary
+          topics to be available\"\nsleep 120  \n/etc/confluent/docker/run\n"
+        env:
+        - name: CONFLUENT_METRICS_TOPIC_REPLICATION
+          value: "1"
+        - name: CONTROL_CENTER_BOOTSTRAP_SERVERS
+          value: kafka:29092
+        - name: CONTROL_CENTER_COMMAND_TOPIC_REPLICATION
+          value: "1"
+        - name: CONTROL_CENTER_CONNECT_01_SOURCE_ACTIVEMQ_CLUSTER
+          value: kafka-connect-01:8083
+        - name: CONTROL_CENTER_CONNECT_02_SINK_ANALYTICS_CLUSTER
+          value: kafka-connect-02:28083
+        - name: CONTROL_CENTER_CONNECT_03_REPLICATOR_CLUSTER
+          value: kafka-connect-04:48083
+        - name: CONTROL_CENTER_CONNECT_03_SINK_ALERTS_CLUSTER
+          value: kafka-connect-03:38083
+        - name: CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS
+          value: "1"
+        - name: CONTROL_CENTER_INTERNAL_TOPICS_REPLICATION
+          value: "1"
+        - name: CONTROL_CENTER_KSQL_ADVERTISED_URL
+          value: http://localhost:8088
+        - name: CONTROL_CENTER_KSQL_URL
+          value: http://ksql-server:8088
+        - name: CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS
+          value: "1"
+        - name: CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_REPLICATION
+          value: "1"
+        - name: CONTROL_CENTER_REPLICATION_FACTOR
+          value: "1"
+        - name: CONTROL_CENTER_SCHEMA_REGISTRY_URL
+          value: http://schema-registry:8081
+        - name: CONTROL_CENTER_STREAMS_CACHE_MAX_BYTES_BUFFERING
+          value: "104857600"
+        - name: CONTROL_CENTER_STREAMS_NUM_STREAM_THREADS
+          value: "1"
+        - name: CONTROL_CENTER_ZOOKEEPER_CONNECT
+          value: zookeeper:2181
+        image: confluentinc/cp-enterprise-control-center:5.4.0-beta1
+        name: control-center
+        ports:
+        - containerPort: 9021
+        resources: {}
+      restartPolicy: Always
+status: {}

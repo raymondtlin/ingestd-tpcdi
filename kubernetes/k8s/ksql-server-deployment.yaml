@@ -1,0 +1,53 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ksql-server
+  name: ksql-server
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.19.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ksql-server
+    spec:
+      containers:
+      - env:
+        - name: KSQL_BOOTSTRAP_SERVERS
+          value: kafka:29092
+        - name: KSQL_CONSUMER_INTERCEPTOR_CLASSES
+          value: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
+        - name: KSQL_CUB_KAFKA_TIMEOUT
+          value: "300"
+        - name: KSQL_KSQL_CACHE_MAX_BYTES_BUFFERING
+          value: "10000000"
+        - name: KSQL_KSQL_COMMIT_INTERVAL_MS
+          value: "2000"
+        - name: KSQL_KSQL_SCHEMA_REGISTRY_URL
+          value: http://schema-registry:8081
+        - name: KSQL_KSQL_SERVICE_ID
+          value: ingestd
+        - name: KSQL_KSQL_SINK_PARTITIONS
+          value: "1"
+        - name: KSQL_KSQL_STREAMS_AUTO_OFFSET_RESET
+          value: earliest
+        - name: KSQL_LISTENERS
+          value: http://0.0.0.0:8088
+        - name: KSQL_PRODUCER_INTERCEPTOR_CLASSES
+          value: io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor
+        image: confluentinc/cp-ksql-server:latest
+        name: ksql-server
+        ports:
+        - containerPort: 8088
+        resources: {}
+      restartPolicy: Always
+status: {}

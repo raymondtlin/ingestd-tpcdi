@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: zookeeper
+  name: zookeeper
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.19.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: zookeeper
+    spec:
+      containers:
+      - env:
+        - name: ZOOKEEPER_CLIENT_PORT
+          value: "2181"
+        - name: ZOOKEEPER_TICK_TIME
+          value: "2000"
+        image: confluentinc/cp-zookeeper:latest
+        name: zookeeper
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/zookeeper/data
+          name: zookeeper-claim0
+        - mountPath: /var/lib/zookeeper/log
+          name: zookeeper-claim1
+      restartPolicy: Always
+      volumes:
+      - name: zookeeper-claim0
+        persistentVolumeClaim:
+          claimName: zookeeper-claim0
+      - name: zookeeper-claim1
+        persistentVolumeClaim:
+          claimName: zookeeper-claim1
+status: {}

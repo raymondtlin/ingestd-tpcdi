@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ksql-cli
+  name: ksql-cli
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.19.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ksql-cli
+    spec:
+      containers:
+      - command:
+        - /bin/sh
+        image: confluentinc/cp-ksql-cli:5.4.0-beta1
+        name: ksql-cli
+        resources: {}
+        tty: true
+        volumeMounts:
+        - mountPath: /data
+          name: ksql-cli-claim0
+      restartPolicy: Always
+      volumes:
+      - name: ksql-cli-claim0
+        persistentVolumeClaim:
+          claimName: ksql-cli-claim0
+status: {}

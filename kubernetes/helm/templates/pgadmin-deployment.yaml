@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.19.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: pgadmin
+  name: pgadmin
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.19.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: pgadmin
+    spec:
+      containers:
+      - env:
+        - name: PGADMIN_DEFAULT_EMAIL
+          value: postgres@example.com
+        - name: PGADMIN_DEFAULT_PASSWORD
+          value: postgres
+        - name: PGADMIN_LIST_PORT
+          value: "18080"
+        image: dpage/pgadmin4
+        name: pgadmin
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+status: {}

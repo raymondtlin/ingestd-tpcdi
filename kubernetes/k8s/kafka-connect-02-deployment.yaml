@@ -1,0 +1,106 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: kafka-connect-02
+  name: kafka-connect-02
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.19.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: kafka-connect-02
+    spec:
+      containers:
+      - args:
+        - bash
+        - -c
+        - "echo \"Installing connector plugins\"\nconfluent-hub install --no-prompt
+          neo4j/kafka-connect-neo4j:1.0.0\nconfluent-hub install --no-prompt confluentinc/kafka-connect-http:1.0.0-preview\n#\necho
+          \"Launching Kafka Connect worker\"\n/etc/confluent/docker/run & \n#\necho
+          \"Waiting for Kafka Connect to start listening on $CONNECT_REST_ADVERTISED_HOST_NAME:$CONNECT_REST_PORT
+          ⏳\"\nwhile : ; do\n  curl_status=$(curl -s -o /dev/null -w %{http_code}
+          http://$CONNECT_REST_ADVERTISED_HOST_NAME:$CONNECT_REST_PORT/connectors)\n
+          \ echo -e $(date) \" Kafka Connect listener HTTP state: \" $curl_status
+          \" (waiting for 200)\"\n  if [ $curl_status -eq 200 ] ; then\n    break\n
+          \ fi\n  sleep 5 \ndone\n#\nsleep infinity\n"
+        env:
+        - name: CLASSPATH
+          value: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.4.0-beta1.jar
+        - name: CONNECT_BOOTSTRAP_SERVERS
+          value: kafka:29092
+        - name: CONNECT_CONFIG_PROVIDERS
+          value: file
+        - name: CONNECT_CONFIG_PROVIDERS_FILE_CLASS
+          value: org.apache.kafka.common.config.provider.FileConfigProvider
+        - name: CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR
+          value: "1"
+        - name: CONNECT_CONFIG_STORAGE_TOPIC
+          value: _connect-02-configs
+        - name: CONNECT_CONSUMER_INTERCEPTOR_CLASSES
+          value: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
+        - name: CONNECT_CUB_KAFKA_TIMEOUT
+          value: "300"
+        - name: CONNECT_GROUP_ID
+          value: connect-02
+        - name: CONNECT_INTERNAL_KEY_CONVERTER
+          value: org.apache.kafka.connect.json.JsonConverter
+        - name: CONNECT_INTERNAL_VALUE_CONVERTER
+          value: org.apache.kafka.connect.json.JsonConverter
+        - name: CONNECT_KEY_CONVERTER
+          value: io.confluent.connect.avro.AvroConverter
+        - name: CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL
+          value: http://schema-registry:8081
+        - name: CONNECT_LOG4J_LOGGERS
+          value: org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR
+        - name: CONNECT_LOG4J_ROOT_LOGLEVEL
+          value: INFO
+        - name: CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR
+          value: "1"
+        - name: CONNECT_OFFSET_STORAGE_TOPIC
+          value: _connect-02-offsets
+        - name: CONNECT_PLUGIN_PATH
+          value: /usr/share/java,/usr/share/confluent-hub-components/
+        - name: CONNECT_PRODUCER_INTERCEPTOR_CLASSES
+          value: io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor
+        - name: CONNECT_REST_ADVERTISED_HOST_NAME
+          value: kafka-connect-02
+        - name: CONNECT_REST_PORT
+          value: "28083"
+        - name: CONNECT_STATUS_STORAGE_REPLICATION_FACTOR
+          value: "1"
+        - name: CONNECT_STATUS_STORAGE_TOPIC
+          value: _connect-02-status
+        - name: CONNECT_VALUE_CONVERTER
+          value: io.confluent.connect.avro.AvroConverter
+        - name: CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL
+          value: http://schema-registry:8081
+        image: confluentinc/cp-kafka-connect:5.4.0-beta1
+        name: kafka-connect-02
+        ports:
+        - containerPort: 28083
+        resources: {}
+        volumeMounts:
+        - mountPath: /data
+          name: kafka-connect-02-claim0
+        - mountPath: /root/.aws/credentials
+          name: kafka-connect-02-claim1
+      restartPolicy: Always
+      volumes:
+      - name: kafka-connect-02-claim0
+        persistentVolumeClaim:
+          claimName: kafka-connect-02-claim0
+      - name: kafka-connect-02-claim1
+        persistentVolumeClaim:
+          claimName: kafka-connect-02-claim1
+status: {}
