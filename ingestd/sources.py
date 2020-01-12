@@ -7,16 +7,17 @@ import types
 from confluent_kafka import avro
 
 
-class FileSource(object):
+class FileSource:
     """
     Abstraction for an opened file.
     """
     def __init__(self, **kwargs):
         """
-        :param kwargs: file_path          (str): source file path
-                       schema_path        (str): avro schema path
-                       key_fields   (list(str)): field as list or list of fields to use as the composite key
-                       parser            (func): parsing function as defined in ingestd/strategies.py
+        :param kwargs:
+            file_path          (str): source file path
+            schema_path        (str): avro schema path
+            key_fields   (list(str)): field as list or list of fields to use as the composite key
+            parser            (func): parsing function as defined in ingestd/strategies.py
         """
         self.file_path = kwargs.pop('file_path', None)
         self.schema_path = kwargs.pop('schema_path', None)
@@ -33,9 +34,13 @@ class FileSource(object):
         else:
             self.file_format = self.file_path.split('.')[-1].lower()
 
+    @property
     def read(self):
+        """
+        Creates a stream handler
+        """
         with open(self.file_path) as handle:
-            yield self.read()
+            yield self.read
 
     def stream(self):
         """
@@ -57,18 +62,28 @@ class FileSource(object):
         with open(path_to_schema) as handle:
             try:
                 return avro.loads(handle.read())
-            except Exception as e:
+            except RuntimeError as e:
                 print(f"Unable to serialize schema as avro, {e}")
 
     def set_record_keys(self, key_fields: list = None) -> None:
+        """
+        Sets the fields to be used as part of the composite key
+        """
         if key_fields:
             setattr(self.key_fields, set(field for field in key_fields))
 
     def set_record_values(self, value_fields: list = None) -> None:
+        """
+        Sets the fields to be used as values
+        """
         if value_fields is not None:
-            setattr(self.value_fields, list(value for value in value_fields if value not in self.key_fields))
+            setattr(self.value_fields, list(value
+                                            for value in value_fields
+                                            if value not in self.key_fields))
         else:
-            setattr(self.value_fields, list(value for value in self.fields if value not in self.key_fields))
+            setattr(self.value_fields, list(value
+                                            for value in self.fields
+                                            if value not in self.key_fields))
 
     def produce_payload(self, specific_flag: bool = False):
         """
@@ -77,16 +92,16 @@ class FileSource(object):
                               if set as True, yields a dict with two keys [key, value]
         :return: namedtuple or dict
         """
-        # generic/specificPayload is an homage paid to General/SpecificRecord in the Kafka-AvroSerializer java source.
+        # generic/specificPayload is an homage paid to General/SpecificRecord
+        # in the Kafka-AvroSerializer java source.
 
         # genericPayload is a namedtuple of the field names mapped to field values
         genericPayload = collections.namedtuple('Payload_', self.fields)
 
-        # specificPayload is a genericPayload as a dict with specified fields in "key" and "value"
+        # specificPayload is a genericPayload as dict with specified fields in "key" and "value"
         specificPayload = {}
 
-        # You might wonder if there is a value error when calling parseDelimited under the guise of parse \
-        # The answer is that there isn't because we "infer" the delimiter from the first line.
+        # By inferring the delimiter, we preclude a ValueError in the call to parseDelimited
 
         for ntuple in map(genericPayload._make, iter(self.parse())):
             if not specific_flag:
@@ -101,12 +116,20 @@ class FileSource(object):
                 # If the message consists of a composite key with multiple fields,\
                 # we should iterate over them and zip the contents
                 if len(specificPayload['record_key_names']) > 1:
-                    specificPayload['key'] = dict({k: v for k, v in zip(specificPayload.pop('record_key_names'),
-                                                                        specificPayload.pop('record_keys'))})
+                    specificPayload['key'] = dict(
+                        {k: v
+                         for k, v in zip(specificPayload.pop('record_key_names'),
+                                         specificPayload.pop('record_keys'))
+                         })
                 else:
-                    specificPayload['key'] = dict({specificPayload.pop('record_key_names'): specificPayload.pop('record_keys')})
+                    specificPayload['key'] = dict(
+                        {specificPayload.pop('record_key_names'): specificPayload.pop('record_keys')
+                         })
 
-                specificPayload['value'] = dict({k: v for k, v in zip(specificPayload.pop('record_value_names'),
-                                                                      specificPayload.pop('record_values'))})
+                specificPayload['value'] = dict(
+                    {k: v
+                     for k, v in zip(specificPayload.pop('record_value_names'),
+                                     specificPayload.pop('record_values'))
+                     })
 
                 yield specificPayload

@@ -1,8 +1,10 @@
-import os
 import argparse
-import confluent_kafka
-import ingestd
+import os
 from glob import glob
+
+import confluent_kafka
+
+import ingestd
 
 parser = argparse.ArgumentParser(description="Producer")
 
@@ -53,8 +55,11 @@ def build_rc():
         dct.update(
             dict(
                 {k: {"path": v,
-                     "key_fields": [field.get('name') for field in key_fields.to_json().get('fields')],
-                     "value_fields": [field.get('name') for field in value_fields.to_json().get('fields')]}}
+                     "key_fields": [field.get('name')
+                                    for field in key_fields.to_json().get('fields')],
+                     "value_fields": [field.get('name')
+                                      for field in value_fields.to_json().get('fields')]
+                     }}
             )
         )
 
@@ -62,6 +67,9 @@ def build_rc():
 
 
 def create_sources(rc: dict) -> list:
+    """
+    Function to instantiate a list of FileSources
+    """
     sources = [ingestd.sources.FileSource(file_path=rc[key].get('path'),
                                           schema_path=f'ingestd/avro/schemas/raw/{key}.avsc',
                                           key_fields=rc[key].get('key_fields'),
@@ -73,6 +81,9 @@ def create_sources(rc: dict) -> list:
 
 
 def determine_parser(fileformat: str):
+    """
+    Returns a parsers signature
+    """
     record_parse_map = {"fwf": ingestd.strategies.parseFixedWidth,
                         "csv": ingestd.strategies.parseDelimited,
                         "txt": ingestd.strategies.parseDelimited,
@@ -104,16 +115,16 @@ if __name__ == "__main__":
                   "sasl.username": os.getenv('CCLOUD_KEY'),
                   "sasl.password": os.getenv('CCLOUD_SECRET')}
 
-    runtime_confs, rc_key_schemas, rc_value_schemas = build_rc()
-    rc_sources = create_sources(runtime_confs)
+    RUNTIME_CONFS, RC_KEY_SCHEMAS, RC_VALUE_SCHEMAS = build_rc()
+    rc_sources = create_sources(RUNTIME_CONFS)
 
     producers = [confluent_kafka.avro.AvroProducer(**CONFIG,
                                                    default_key_schema=key_schema,
                                                    default_value_schema=value_schema,
                                                    schema_registry=os.getenv('SCHEMA_REGISTRY_URL'))
-                 for key_schema, value_schema in zip(rc_key_schemas, rc_value_schemas)]
+                 for key_schema, value_schema in zip(RC_KEY_SCHEMAS, RC_VALUE_SCHEMAS)]
 
-    for src, producer, topic in zip(rc_sources, producers, runtime_confs.keys()):
+    for src, producer, topic in zip(rc_sources, producers, RUNTIME_CONFS.keys()):
         for specific_record in src.produce_payload(specific_flag=True):
             producer.produce(topic=topic,
                              key=dict({key_name: key_value for key_name, key_value
