@@ -12,6 +12,7 @@ class OperatorFactory:
     """
     Factory Object
     """
+
     def __init__(self):
         self._operators = {}
 
@@ -128,6 +129,7 @@ class DelimitedOperator(Operator):
     """
     Operator to handle delimited files
     """
+
     def __init__(self,
                  source_path: str = None,
                  schema_path: str = None,
@@ -176,6 +178,7 @@ class FixedWidthOperator(Operator):
     """
     Operator to handle fixed-width format files
     """
+
     def __init__(self, source_path: str = None, field_widths_lookup=None):
         super().__init__(source_path)
         self.field_width_lookup = field_widths_lookup or {}
@@ -199,7 +202,7 @@ class FixedWidthOperator(Operator):
     def _create_parser(self, field_widths: tuple):
         cuts = tuple(cut for cut in itertools.accumulate(abs(fw) for fw in field_widths))
         pads = tuple(fw < 0 for fw in field_widths)
-        fields = tuple(itertools.zip_longest(pads, (0, ) + cuts, cuts))[:-1]
+        fields = tuple(itertools.zip_longest(pads, (0,) + cuts, cuts))[:-1]
         return lambda line: tuple(line[i: j] for pad, i, j in fields if not pad)
 
     def parse(self):
