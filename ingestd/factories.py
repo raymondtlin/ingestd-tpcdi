@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+#!/usr/bin/env python3
 
 
 class SourceFactory:
@@ -9,7 +9,7 @@ class SourceFactory:
     def __init__(self):
         self._sources = {}
 
-    def register(self, key: str, source):
+    def register(self, key, source):
         """
         Registers a stream source
         :param key: identifier String for registered source
@@ -17,7 +17,7 @@ class SourceFactory:
         """
         self._sources[key] = source
 
-    def get_source(self, key: str):
+    def get_source(self, key):
         """
         Retrieves instance of registered source.
         :param key: registered file_format str
@@ -37,7 +37,7 @@ class StrategyFactory:
     def __init__(self):
         self._strategies = {}
 
-    def register(self, key: str, strategy):
+    def register(self, key, strategy):
         """
         Registers an strategy
         :param key: identifier String for registered Strategy
@@ -46,7 +46,7 @@ class StrategyFactory:
         """
         self._strategies[key] = strategy
 
-    def get(self, key: str):
+    def get(self, key):
         """
         Retrieves instance of registered strategy.
         :param key: registered file_format str

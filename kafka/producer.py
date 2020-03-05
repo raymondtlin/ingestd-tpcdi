@@ -1,7 +1,11 @@
+#!/usr/bin/env python3
+
+
 import os
 import argparse
 import confluent_kafka
-import ingestd
+from ingestd-tpcdi import ingestd.sources
+from ingestd-tpcdi import ingestd.strategies
 from glob import glob
 
 parser = argparse.ArgumentParser(description="Producer")

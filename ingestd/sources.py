@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+#!/usr/bin/env python3
 
 import collections
 import operator
@@ -11,12 +11,14 @@ class FileSource(object):
     """
     Abstraction for an opened file.
     """
+
     def __init__(self, **kwargs):
         """
-        :param kwargs: file_path          (str): source file path
-                       schema_path        (str): avro schema path
-                       key_fields   (list(str)): field as list or list of fields to use as the composite key
-                       parser            (func): parsing function as defined in ingestd/strategies.py
+        :param kwargs:
+            file_path          (str): source file path
+            schema_path        (str): avro schema path
+            key_fields   (list(str)): list of fields to use as composite key
+            parser            (func): parsing fn as defined in strategies
         """
         self.file_path = kwargs.pop('file_path', None)
         self.schema_path = kwargs.pop('schema_path', None)
@@ -73,19 +75,20 @@ class FileSource(object):
     def produce_payload(self, specific_flag: bool = False):
         """
         Creates a message which can be sent to a Kafka Producer.
-        :param specific_flag: if set to False, yields named tuple of all fields \
-                              if set as True, yields a dict with two keys [key, value]
+        :param specific_flag: if False, yields named tuple of all fields \
+                              if True, yields a dict with two keys [key, value]
         :return: namedtuple or dict
         """
-        # generic/specificPayload is an homage paid to General/SpecificRecord in the Kafka-AvroSerializer java source.
+        # Equivalent to General/SpecificRecord in java Kafka-AvroSerializer
 
-        # genericPayload is a namedtuple of the field names mapped to field values
+        # genericPayload contains field names mapped to field values
         genericPayload = collections.namedtuple('Payload_', self.fields)
 
-        # specificPayload is a genericPayload as a dict with specified fields in "key" and "value"
+        # specificPayload is a genericPayload dict w/ fields in "key", "value"
         specificPayload = {}
 
-        # You might wonder if there is a value error when calling parseDelimited under the guise of parse \
+        # You might wonder if there is a value error when calling parseDelimited
+        # under the guise of parse \
         # The answer is that there isn't because we "infer" the delimiter from the first line.
 
         for ntuple in map(genericPayload._make, iter(self.parse())):
